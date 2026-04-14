@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsere Momente</title>
+
+  <!-- Google Font für eleganten Look -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      color: #111;
+    }
+
+    /* HEADER / PROFIL */
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+    }
+
+    .profile img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .profile-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888;
+      letter-spacing: 1px;
+    }
+
+    /* GALERIE */
+    .gallery {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* KEIN HOVER EFFEKT (bewusst minimalistisch) */
+
+    /* LIGHTBOX */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      font-weight: 300;
+    }
+
+    /* FOOTER (optional elegant) */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 12px;
+      color: #aaa;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="profile">
+    <!-- PROFILBILD ÄNDERN -->
+    <img src="C:\Users\Chef\OneDrive\Dokumente\Dateien\Freizeit\Bilder_YY_LL\IMG_0531.JPG">
+
+    <!-- NAME ÄNDERN -->
+    <div class="profile-name">¥EN¥EN & L€O</div>
+
+    <div class="subtitle">YY & LL</div>
+  </div>
+</header>
+
+<div class="gallery">
+  <!-- BILDER HIER EINFÜGEN -->
+  <img src="C:\Users\Chef\OneDrive\Dokumente\Dateien\Freizeit\Bilder_YY_LL\IMG_0556.JPG">
+  <img src="C:\Users\Chef\OneDrive\Dokumente\Dateien\Freizeit\Bilder_YY_LL\IMG_0557.JPG">
+  <img src="C:\Users\Chef\OneDrive\Dokumente\Dateien\Freizeit\Bilder_YY_LL\IMG_6401.jpeg">
+  <img src="C:\Users\Chef\OneDrive\Dokumente\Dateien\Freizeit\Bilder_YY_LL\IMG_8445.jpeg">
+</div>
+
+<div class="lightbox" id="lightbox">
+  <span class="close" onclick="closeLightbox()">&times;</span>
+  <img id="lightbox-img">
+</div>
+
+<footer>
+  our gallery
+</footer>
+
+<script>
+  const images = document.querySelectorAll('.gallery img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+
+  images.forEach(img => {
+    img.addEventListener('click', () => {
+      lightbox.classList.add('active');
+      lightboxImg.src = img.src;
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+</script>
+
+</body>
+</html>
