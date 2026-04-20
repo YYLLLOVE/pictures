@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unsere Momente</title>
 
+  <!-- Google Font für eleganten Look -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
   <style>
@@ -15,6 +16,7 @@
       color: #111;
     }
 
+    /* HEADER / PROFIL */
     header {
       text-align: center;
       padding: 60px 20px 30px;
@@ -42,6 +44,7 @@
       letter-spacing: 1px;
     }
 
+    /* GALERIE */
     .gallery {
       max-width: 1000px;
       margin: 40px auto;
@@ -59,6 +62,9 @@
       cursor: pointer;
     }
 
+    /* KEIN HOVER EFFEKT (bewusst minimalistisch) */
+
+    /* LIGHTBOX */
     .lightbox {
       position: fixed;
       top: 0;
@@ -91,6 +97,7 @@
       font-weight: 300;
     }
 
+    /* FOOTER (optional elegant) */
     footer {
       text-align: center;
       padding: 40px 20px;
@@ -98,39 +105,32 @@
       color: #aaa;
       letter-spacing: 1px;
     }
-
-    /* Upload Button */
-    #uploadBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 10px 14px;
-      background: #111;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
   </style>
 </head>
 <body>
 
-<input type="file" id="uploadInput" accept="image/*" style="display:none">
-<button id="uploadBtn">Upload</button>
-
 <header>
   <div class="profile">
+    <!-- PROFILBILD ÄNDERN -->
     <img src="IMG_0531.JPG">
+
+    <!-- NAME ÄNDERN -->
     <div class="profile-name">¥EN¥EN & L€O</div>
+
     <div class="subtitle">YY & LL</div>
   </div>
 </header>
 
-<div class="gallery" id="gallery">
+<div class="gallery">
+  <!-- BILDER HIER EINFÜGEN -->
   <img src="IMG_0556.JPG">
   <img src="IMG_0557.JPG">
+  <img src="IMG_6401.jpeg">
+  <img src="IMG_8445.jpeg">
+  <img src="IMG_8514.jpeg">
+  <img src="IMG_5970.jpeg">
+  <img src="IMG_5952.jpeg">
+  <img src="IMG_5891.jpeg">
 </div>
 
 <div class="lightbox" id="lightbox">
@@ -142,76 +142,21 @@
   our gallery
 </footer>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-analytics.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL, listAll }
-    from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBSdoSNAKCSHCau795FmQl3vyVpV-TVjhk",
-    authDomain: "yyll-65961.firebaseapp.com",
-    projectId: "yyll-65961",
-    storageBucket: "yyll-65961.appspot.com"
-    messagingSenderId: "372429848516",
-    appId: "1:372429848516:web:38ab854517e152c0bdae91",
-    measurementId: "G-CBHF9WQVE3"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const storage = getStorage(app);
-
-  const uploadBtn = document.getElementById("uploadBtn");
-  const uploadInput = document.getElementById("uploadInput");
-  const gallery = document.getElementById("gallery");
-
-  uploadBtn.onclick = () => uploadInput.click();
-
-  uploadInput.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const storageRef = ref(storage, 'images/' + Date.now() + "_" + file.name);
-    await uploadBytes(storageRef, file);
-
-    const url = await getDownloadURL(storageRef);
-    addImage(url);
-  };
-
-  function addImage(url) {
-    const img = document.createElement("img");
-    img.src = url;
-
-    img.addEventListener('click', () => {
-      lightbox.classList.add('active');
-      lightboxImg.src = url;
-    });
-
-    gallery.appendChild(img);
-  }
-
-  async function loadImages() {
-    const listRef = ref(storage, 'images/');
-    const res = await listAll(listRef);
-
-    res.items.forEach(async (itemRef) => {
-      const url = await getDownloadURL(itemRef);
-      addImage(url);
-    });
-  }
-
-  loadImages();
-
+<script>
+  const images = document.querySelectorAll('.gallery img');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+
+  images.forEach(img => {
+    img.addEventListener('click', () => {
+      lightbox.classList.add('active');
+      lightboxImg.src = img.src;
+    });
+  });
 
   function closeLightbox() {
     lightbox.classList.remove('active');
   }
-
-  window.closeLightbox = closeLightbox;
-
 </script>
 
 </body>
