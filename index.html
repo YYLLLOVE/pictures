@@ -143,74 +143,88 @@
 </footer>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-analytics.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL, listAll }
-    from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, listAll }
+from "https://www.gstatic.com/firebasejs/12.12.0/firebase-storage.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBSdoSNAKCSHCau795FmQl3vyVpV-TVjhk",
-    authDomain: "yyll-65961.firebaseapp.com",
-    projectId: "yyll-65961",
-    storageBucket: "yyll-65961.appspot.com",
-    messagingSenderId: "372429848516",
-    appId: "1:372429848516:web:38ab854517e152c0bdae91",
-    measurementId: "G-CBHF9WQVE3"
-  };
+const firebaseConfig = {
+  apiKey: "DEIN_API_KEY",
+  authDomain: "yyll-65961.firebaseapp.com",
+  projectId: "yyll-65961",
+  storageBucket: "yyll-65961.appspot.com", 
+  messagingSenderId: "372429848516",
+  appId: "1:372429848516:web:38ab854517e152c0bdae91"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const storage = getStorage(app);
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
-  const uploadBtn = document.getElementById("uploadBtn");
-  const uploadInput = document.getElementById("uploadInput");
-  const gallery = document.getElementById("gallery");
+const uploadBtn = document.getElementById("uploadBtn");
+const uploadInput = document.getElementById("uploadInput");
+const gallery = document.getElementById("gallery");
 
-  uploadBtn.onclick = () => uploadInput.click();
+uploadBtn.onclick = () => uploadInput.click();
 
-  uploadInput.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+uploadInput.onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const storageRef = ref(storage, 'images/' + Date.now() + "_" + file.name);
+  try {
+    const fileName = Date.now() + "_" + file.name;
+    const storageRef = ref(storage, 'images/' + fileName);
+
+    console.log("Uploading:", fileName);
+
     await uploadBytes(storageRef, file);
 
     const url = await getDownloadURL(storageRef);
     addImage(url);
-  };
 
-  function addImage(url) {
-    const img = document.createElement("img");
-    img.src = url;
+    console.log("Upload erfolgreich:", url);
 
-    img.addEventListener('click', () => {
-      lightbox.classList.add('active');
-      lightboxImg.src = url;
-    });
-
-    gallery.appendChild(img);
+  } catch (error) {
+    console.error("Upload Fehler:", error);
+    alert("Upload fehlgeschlagen: " + error.message);
   }
+};
 
-  async function loadImages() {
+function addImage(url) {
+  const img = document.createElement("img");
+  img.src = url;
+
+  img.addEventListener('click', () => {
+    lightbox.classList.add('active');
+    lightboxImg.src = url;
+  });
+
+  gallery.appendChild(img);
+}
+
+async function loadImages() {
+  try {
     const listRef = ref(storage, 'images/');
     const res = await listAll(listRef);
 
-    res.items.forEach(async (itemRef) => {
+    for (const itemRef of res.items) {
       const url = await getDownloadURL(itemRef);
       addImage(url);
-    });
+    }
+
+    console.log("Bilder geladen:", res.items.length);
+
+  } catch (error) {
+    console.error("Fehler beim Laden:", error);
   }
+}
 
-  loadImages();
+loadImages();
 
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
 
-  function closeLightbox() {
-    lightbox.classList.remove('active');
-  }
-
-  window.closeLightbox = closeLightbox;
+window.closeLightbox = function () {
+  lightbox.classList.remove('active');
+};
 </script>
 
 </body>
